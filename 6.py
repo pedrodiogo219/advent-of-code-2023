@@ -2,7 +2,6 @@ import math
 with open('inputs/6.txt', 'r') as file:
 
     time = int("".join(file.readline().strip().split()[1:]))
-    # times = [int(x) for x in file.readline().strip().split()[1:]]
     distance = int("".join(file.readline().strip().split()[1:]))
     
     print(time, distance)
