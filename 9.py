@@ -3,7 +3,7 @@ with open('inputs/9.txt', 'r') as file:
     while True:
         seq = []
         text = file.readline().strip().split()
-        seq.append(list(map(int, text)))
+        seq.append(list(map(int, text))[::-1])
         if not text:
             break
         line = 0
