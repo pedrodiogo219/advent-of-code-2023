@@ -38,7 +38,35 @@ def check(springs, groups):
     
     # print(springs, groups)
     return newGroups == groups
-            
+
+memo = {}
+
+def dp(pos, groupPos, last):
+    if groupPos > len(groups):
+        return 0
+    if pos == len(springs):
+        memo[(pos, groupPos, last)] = int(groupPos == len(groups))
+        return memo[(pos, groupPos, last)]
+    if (pos, groupPos, last) in memo:
+        return memo[(pos, groupPos, last)]
+    
+    # print((pos, groupPos, last))
+    # print("analisando um ", springs[pos])
+    ans = 0
+    if springs[pos] == '.' or springs[pos] == '?':
+        if last > 0:
+            if groupPos >= len(groups) or last != groups[groupPos]:
+                ans = 0
+            else:
+                ans += dp(pos + 1, groupPos + 1, 0)
+        else:
+            ans += dp(pos + 1, groupPos, 0)
+
+    if springs[pos] == '#' or springs[pos] == '?':
+        ans += dp(pos + 1, groupPos, last + 1)            
+    
+    memo[(pos, groupPos, last)] = ans
+    return ans
 
 with open('inputs/12.txt', 'r') as file:
     lineCount = 0
@@ -48,8 +76,19 @@ with open('inputs/12.txt', 'r') as file:
         springs, groups = line.strip().split()
         groups = list(map(int, groups.split(',')))
 
-        ans = bruteForce(springs, groups)
-        # print(ans)
+        aux = springs
+        for _ in range(4):
+            springs += '?' + aux
+        springs += '.'
+
+        naux = [g for g in groups]
+        for _ in range(4):
+            groups += naux
+
+        memo = {}
+        ans = dp(0, 0, 0)
+        print(ans)
+        # print(memo)
         total += ans
     print(total)
     
